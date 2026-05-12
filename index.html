@@ -28,7 +28,6 @@
     position: relative;
   }
 
-  /* Конфетти на фоне */
   body::before {
     content: '';
     position: fixed;
@@ -51,11 +50,129 @@
     100% { background-position: 80px 80px, 120px 180px, 120px 130px, 210px 230px; }
   }
 
+  /* ====== ЗАСТАВКА (INTRO) ====== */
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #f5e8d8;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Расходящиеся красные лучи (стиль японского "восходящего солнца") */
+  .rays {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 250vmax;
+    height: 250vmax;
+    transform: translate(-50%, -50%);
+    background: conic-gradient(
+      from 0deg,
+      #c1272d 0deg 18deg, transparent 18deg 36deg,
+      #c1272d 36deg 54deg, transparent 54deg 72deg,
+      #c1272d 72deg 90deg, transparent 90deg 108deg,
+      #c1272d 108deg 126deg, transparent 126deg 144deg,
+      #c1272d 144deg 162deg, transparent 162deg 180deg,
+      #c1272d 180deg 198deg, transparent 198deg 216deg,
+      #c1272d 216deg 234deg, transparent 234deg 252deg,
+      #c1272d 252deg 270deg, transparent 270deg 288deg,
+      #c1272d 288deg 306deg, transparent 306deg 324deg,
+      #c1272d 324deg 342deg, transparent 342deg 360deg
+    );
+    animation: raysRotate 20s linear infinite;
+    filter: blur(0.5px);
+  }
+
+  /* Виньетка и винтажная текстура поверх лучей */
+  .rays-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at center, transparent 0%, rgba(245, 232, 216, 0.15) 60%, rgba(245, 232, 216, 0.45) 100%),
+      radial-gradient(ellipse at 30% 40%, rgba(255,255,255,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 60%, rgba(0,0,0,0.07) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  @keyframes raysRotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  .intro-word {
+    position: absolute;
+    font-family: 'Bungee Shade', cursive;
+    font-size: clamp(3.5rem, 14vw, 11rem);
+    letter-spacing: 4px;
+    line-height: 1;
+    background: linear-gradient(
+      45deg,
+      #ff0099 0%,
+      #ffcc00 20%,
+      #00ff88 40%,
+      #00ccff 60%,
+      #ff3366 80%,
+      #9933ff 100%
+    );
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-stroke: 4px #fff;
+    color: transparent;
+    text-shadow:
+      0 0 30px rgba(255, 255, 255, 0.8),
+      8px 8px 0 #000,
+      10px 10px 0 #ff00aa;
+    opacity: 0;
+    transform: scale(0.3) rotate(-15deg);
+    text-align: center;
+    white-space: nowrap;
+    animation: rainbowShift 1.5s ease infinite;
+  }
+
+  @keyframes rainbowShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  .intro-word.show {
+    animation:
+      rainbowShift 1.5s ease infinite,
+      wordAppear 2s ease forwards;
+  }
+
+  @keyframes wordAppear {
+    0% { opacity: 0; transform: scale(0.3) rotate(-15deg); }
+    15% { opacity: 1; transform: scale(1.15) rotate(3deg); }
+    25% { transform: scale(1) rotate(-2deg); }
+    80% { opacity: 1; transform: scale(1) rotate(-2deg); }
+    100% { opacity: 0; transform: scale(1.3) rotate(5deg); }
+  }
+
+  .intro.fade-out {
+    animation: introFadeOut 0.8s ease forwards;
+  }
+
+  @keyframes introFadeOut {
+    to { opacity: 0; visibility: hidden; }
+  }
+
+  /* Основной интерфейс — выезжает снизу */
   .container {
     position: relative;
     z-index: 1;
     max-width: 1100px;
     margin: 0 auto;
+    transform: translateY(100vh);
+    transition: transform 1.2s cubic-bezier(0.34, 1.3, 0.64, 1);
+  }
+
+  .container.slide-up {
+    transform: translateY(0);
   }
 
   /* ===== ЗАГОЛОВОК ===== */
@@ -84,11 +201,7 @@
     letter-spacing: 2px;
     background: linear-gradient(
       45deg,
-      #ff0099 0%,
-      #ffcc00 25%,
-      #00ccff 50%,
-      #ff3366 75%,
-      #9933ff 100%
+      #ff0099 0%, #ffcc00 25%, #00ccff 50%, #ff3366 75%, #9933ff 100%
     );
     background-size: 300% 300%;
     -webkit-background-clip: text;
@@ -155,11 +268,11 @@
     to { transform: rotate(360deg); }
   }
 
-  /* ===== СЕТКА КАРТОЧЕК ===== */
+  /* ===== СЕТКА КАРТОЧЕК (6 ШТУК = 3x2) ===== */
   .cards-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+    gap: 20px;
     margin: 30px auto;
     max-width: 700px;
     padding: 0 10px;
@@ -196,14 +309,10 @@
     background:
       repeating-linear-gradient(
         45deg,
-        #ff4081 0px,
-        #ff4081 15px,
-        #ffeb3b 15px,
-        #ffeb3b 30px,
-        #00bcd4 30px,
-        #00bcd4 45px,
-        #7c4dff 45px,
-        #7c4dff 60px
+        #ff4081 0px, #ff4081 15px,
+        #ffeb3b 15px, #ffeb3b 30px,
+        #00bcd4 30px, #00bcd4 45px,
+        #7c4dff 45px, #7c4dff 60px
       );
     display: flex;
     align-items: center;
@@ -244,7 +353,7 @@
     z-index: 2;
   }
 
-  /* ===== РАСКРЫТАЯ КАРТОЧКА (МОДАЛКА) ===== */
+  /* ===== МОДАЛКА ===== */
   .modal-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -269,8 +378,8 @@
 
   .modal-card {
     position: relative;
-    width: min(90vw, 500px);
-    aspect-ratio: 1;
+    width: min(90vw, 90vh, 600px);
+    aspect-ratio: 1 / 1;
     border-radius: 25px;
     overflow: hidden;
     box-shadow:
@@ -291,6 +400,8 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center center;
+    aspect-ratio: 1 / 1;
     background: #fff;
   }
 
@@ -303,15 +414,12 @@
     touch-action: none;
   }
 
-  .scratch-canvas:active {
-    cursor: grabbing;
-  }
+  .scratch-canvas:active { cursor: grabbing; }
 
   .scratch-hint {
     position: absolute;
     bottom: -55px;
-    left: 0;
-    right: 0;
+    left: 0; right: 0;
     text-align: center;
     color: #fff;
     font-family: 'Bungee', cursive;
@@ -345,11 +453,8 @@
     transition: transform 0.2s;
   }
 
-  .close-btn:hover {
-    transform: rotate(90deg) scale(1.1);
-  }
+  .close-btn:hover { transform: rotate(90deg) scale(1.1); }
 
-  /* Когда карточка стёрта */
   .card.opened .card-question {
     opacity: 0.4;
     filter: grayscale(0.5);
@@ -361,22 +466,70 @@
     -webkit-text-stroke: 4px #fff;
   }
 
-  /* Адаптив */
+  /* ===== КНОПКА МУЗЫКИ ===== */
+  .music-toggle {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 500;
+    background: #fff;
+    border: 4px solid #ff4081;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: transform 0.3s;
+  }
+
+  .music-toggle:hover { transform: scale(1.1) rotate(15deg); }
+
+  .music-toggle.playing {
+    animation: musicPulse 1s ease-in-out infinite;
+  }
+
+  @keyframes musicPulse {
+    0%, 100% { box-shadow: 0 4px 15px rgba(255, 64, 129, 0.5); }
+    50% { box-shadow: 0 4px 25px rgba(255, 64, 129, 0.9), 0 0 0 8px rgba(255, 64, 129, 0.2); }
+  }
+
   @media (max-width: 500px) {
-    .cards-grid {
-      gap: 10px;
-      max-width: 100%;
-    }
-    .stars-decoration {
-      font-size: 1.5rem;
-      letter-spacing: 5px;
-    }
+    .cards-grid { gap: 12px; max-width: 100%; }
+    .stars-decoration { font-size: 1.5rem; letter-spacing: 5px; }
   }
 </style>
 </head>
 <body>
 
-<div class="container">
+<!-- ====== ЗАСТАВКА ====== -->
+<div class="intro" id="intro">
+  <div class="rays"></div>
+  <div class="rays-overlay"></div>
+  <div class="intro-word" id="word1">НАДЯ</div>
+  <div class="intro-word" id="word2">ИСПЫТАЙ</div>
+  <div class="intro-word" id="word3">УДАЧУ</div>
+</div>
+
+<!--
+  ====== МУЗЫКА ======
+  ВСТАВЬ ССЫЛКУ НА АУДИОФАЙЛ В АТРИБУТ src НИЖЕ.
+  Поддерживаются: .mp3, .wav, .ogg, .m4a
+  Примеры:
+    src="music.mp3"            (файл рядом с html)
+    src="https://example.com/song.mp3"   (прямая ссылка)
+-->
+<audio id="bgMusic" loop>
+  <source src="https://audio.jukehost.co.uk/019e1cab-2ba9-72b1-a418-e9ac4406ea75" type="audio/mpeg">
+</audio>
+
+<button class="music-toggle" id="musicToggle" title="Музыка вкл/выкл">🔇</button>
+
+<!-- ====== ОСНОВНОЙ ИНТЕРФЕЙС ====== -->
+<div class="container" id="mainContainer">
 
   <div class="header">
     <div class="stars-decoration">⭐ 🎰 🎲 🎁 🎰 ⭐</div>
@@ -388,20 +541,17 @@
     <span>👆</span> Жми на карточку и стирай её пальцем или мышкой! <span>🪙</span>
   </div>
 
-  <div class="cards-grid" id="cardsGrid">
-    <!-- 9 карточек генерируются скриптом -->
-  </div>
+  <div class="cards-grid" id="cardsGrid"></div>
 
 </div>
 
-<!-- Модалка с раскрытой карточкой -->
+<!-- Модалка -->
 <div class="modal-overlay" id="modal">
   <div class="modal-card">
     <button class="close-btn" id="closeBtn">✕</button>
     <!--
-      ВСТАВЬ СВОИ ИЗОБРАЖЕНИЯ:
-      Замени src у каждой <img> ниже на путь к своему изображению.
-      Изображения должны быть пронумерованы от 1 до 9.
+      ВСТАВЬ СВОИ ИЗОБРАЖЕНИЯ В МАССИВ `images` НИЖЕ В СКРИПТЕ.
+      ИДЕАЛЬНЫЙ ФОРМАТ: 2000 x 2000 px.
     -->
     <img class="reveal-image" id="revealImage" src="" alt="Приз">
     <canvas class="scratch-canvas" id="scratchCanvas"></canvas>
@@ -410,23 +560,67 @@
 </div>
 
 <script>
-  // ====== ПУТИ К ИЗОБРАЖЕНИЯМ ======
-  // ВСТАВЬ СЮДА ПУТИ К СВОИМ 9 ИЗОБРАЖЕНИЯМ
+  // ====== ПУТИ К ИЗОБРАЖЕНИЯМ (6 ШТУК, формат 2000×2000) ======
   const images = [
     'https://i.postimg.cc/W4m0cxfQ/XXXL-(11)-5.jpg', // карточка 1
-    'image2.jpg', // карточка 2
-    'image3.jpg', // карточка 3
-    'image4.jpg', // карточка 4
-    'image5.jpg', // карточка 5
-    'image6.jpg', // карточка 6
-    'image7.jpg', // карточка 7
-    'image8.jpg', // карточка 8
-    'image9.jpg'  // карточка 9
+    'https://i.postimg.cc/dVgKcxTp/ozon-2000.png', // карточка 2
+    'https://i.postimg.cc/Wz5QWWvD/2zpxqs462hs78cvj4773nyc0l5qn8wn4.png', // карточка 3
+    'https://i.postimg.cc/J4gFsB4M/d3r8augx82wmyl7ywfn9lo79x3g1qrwn.png', // карточка 4
+    'https://i.postimg.cc/8PDYMVLK/unnamed-16.png', // карточка 5
+    'https://i.postimg.cc/6qhYYyCj/5e0276c1-cc98-45a0-95e8-537303a9dcad-720x720.jpg'  // карточка 6
   ];
 
-  // ====== ГЕНЕРАЦИЯ КАРТОЧЕК ======
+  // ====== ЗАСТАВКА: последовательность слов ======
+  const word1 = document.getElementById('word1');
+  const word2 = document.getElementById('word2');
+  const word3 = document.getElementById('word3');
+  const intro = document.getElementById('intro');
+  const mainContainer = document.getElementById('mainContainer');
+
+  // НАДЯ — 0...2 сек
+  setTimeout(() => word1.classList.add('show'), 100);
+  // ИСПЫТАЙ — 2...4 сек
+  setTimeout(() => word2.classList.add('show'), 2100);
+  // УДАЧУ — 4...6 сек
+  setTimeout(() => word3.classList.add('show'), 4100);
+  // Через 6 сек — заставка тает, интерфейс выезжает снизу
+  setTimeout(() => {
+    intro.classList.add('fade-out');
+    mainContainer.classList.add('slide-up');
+  }, 6100);
+  setTimeout(() => { intro.style.display = 'none'; }, 7000);
+
+  // ====== МУЗЫКА ======
+  const music = document.getElementById('bgMusic');
+  const musicBtn = document.getElementById('musicToggle');
+  let musicPlaying = false;
+
+  musicBtn.addEventListener('click', () => {
+    if (musicPlaying) {
+      music.pause();
+      musicBtn.textContent = '🔇';
+      musicBtn.classList.remove('playing');
+    } else {
+      music.play().catch(err => console.log('Не удалось запустить:', err));
+      musicBtn.textContent = '🎵';
+      musicBtn.classList.add('playing');
+    }
+    musicPlaying = !musicPlaying;
+  });
+
+  // Браузеры блокируют автоплей — запускаем после первого клика/тапа
+  document.addEventListener('click', function tryPlay() {
+    music.play().then(() => {
+      musicPlaying = true;
+      musicBtn.textContent = '🎵';
+      musicBtn.classList.add('playing');
+    }).catch(() => {});
+    document.removeEventListener('click', tryPlay);
+  }, { once: true });
+
+  // ====== ГЕНЕРАЦИЯ 6 КАРТОЧЕК ======
   const grid = document.getElementById('cardsGrid');
-  for (let i = 0; i < 9; i++) {
+  for (let i = 0; i < 6; i++) {
     const card = document.createElement('div');
     card.className = 'card';
     card.dataset.index = i;
@@ -453,11 +647,7 @@
     currentCardIndex = index;
     revealImg.src = images[index];
     modal.classList.add('active');
-
-    // Ждём, пока модалка отрисуется, чтобы получить размеры
-    requestAnimationFrame(() => {
-      setupCanvas();
-    });
+    requestAnimationFrame(() => setupCanvas());
   }
 
   function setupCanvas() {
@@ -465,7 +655,6 @@
     canvas.width = rect.width;
     canvas.height = rect.height;
 
-    // Рисуем "защитный слой" — серебристая поверхность скретч-карты
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
     gradient.addColorStop(0, '#c0c0c0');
     gradient.addColorStop(0.3, '#e8e8e8');
@@ -475,7 +664,6 @@
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Добавим узор сверху для эффекта скретч-карты
     ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
     ctx.font = 'bold ' + (canvas.width / 10) + 'px sans-serif';
     ctx.textAlign = 'center';
@@ -484,7 +672,6 @@
     ctx.fillText('💰💰💰', canvas.width / 2, canvas.height / 2);
     ctx.fillText('🍀 УДАЧИ 🍀', canvas.width / 2, canvas.height / 2 + canvas.height / 6);
 
-    // Режим стирания
     ctx.globalCompositeOperation = 'destination-out';
   }
 
@@ -512,24 +699,20 @@
     ctx.beginPath();
     ctx.arc(x, y, radius, 0, Math.PI * 2);
     ctx.fill();
-
-    // Проверим, сколько уже стёрли
     checkScratchedPercent();
   }
 
   function checkScratchedPercent() {
-    // Проверяем не каждый раз, а с шансом, чтобы не тормозило
     if (Math.random() > 0.05) return;
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const pixels = imageData.data;
     let transparent = 0;
     const total = pixels.length / 4;
-    for (let i = 3; i < pixels.length; i += 4 * 20) { // сэмплируем
+    for (let i = 3; i < pixels.length; i += 4 * 20) {
       if (pixels[i] < 50) transparent++;
     }
     const ratio = (transparent / (total / 20));
     if (ratio > 0.55) {
-      // Автоматически очищаем оставшееся
       ctx.globalCompositeOperation = 'destination-out';
       ctx.fillStyle = 'rgba(0,0,0,1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -544,34 +727,27 @@
     }
   }
 
-  // События стирания
   canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(e); });
   canvas.addEventListener('mousemove', scratch);
   canvas.addEventListener('mouseup', () => { isDrawing = false; });
   canvas.addEventListener('mouseleave', () => { isDrawing = false; });
-
   canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); }, { passive: false });
   canvas.addEventListener('touchmove', scratch, { passive: false });
   canvas.addEventListener('touchend', () => { isDrawing = false; });
 
-  // Закрытие модалки
   closeBtn.addEventListener('click', closeModal);
   modal.addEventListener('click', (e) => {
     if (e.target === modal) closeModal();
   });
 
   function closeModal() {
-    // Считаем карточку открытой, даже если стёрли частично
     markAsOpened();
     modal.classList.remove('active');
     currentCardIndex = null;
   }
 
-  // Ресайз окна — пересоздать canvas
   window.addEventListener('resize', () => {
-    if (modal.classList.contains('active')) {
-      setupCanvas();
-    }
+    if (modal.classList.contains('active')) setupCanvas();
   });
 </script>
 
