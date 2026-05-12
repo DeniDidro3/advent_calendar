@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>НАДЯ, ИСПЫТАЙ УДАЧУ!</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Bungee&family=Fredoka:wght@600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: 'Fredoka', sans-serif;
+    background:
+      radial-gradient(circle at 10% 20%, #ff6ec4 0%, transparent 40%),
+      radial-gradient(circle at 90% 10%, #ffd93d 0%, transparent 40%),
+      radial-gradient(circle at 50% 90%, #6bcfff 0%, transparent 45%),
+      radial-gradient(circle at 20% 80%, #b388ff 0%, transparent 40%),
+      linear-gradient(135deg, #ff9a9e 0%, #fad0c4 30%, #fbc2eb 60%, #a18cd1 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+  }
+
+  /* Конфетти на фоне */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      radial-gradient(circle, #ffeb3b 3px, transparent 4px),
+      radial-gradient(circle, #ff4081 3px, transparent 4px),
+      radial-gradient(circle, #00e676 3px, transparent 4px),
+      radial-gradient(circle, #2196f3 3px, transparent 4px);
+    background-size: 80px 80px, 120px 120px, 100px 100px, 140px 140px;
+    background-position: 0 0, 40px 60px, 20px 30px, 70px 90px;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+    animation: confettiMove 30s linear infinite;
+  }
+
+  @keyframes confettiMove {
+    0% { background-position: 0 0, 40px 60px, 20px 30px, 70px 90px; }
+    100% { background-position: 80px 80px, 120px 180px, 120px 130px, 210px 230px; }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ===== ЗАГОЛОВОК ===== */
+  .header {
+    text-align: center;
+    padding: 30px 10px 20px;
+    position: relative;
+  }
+
+  .stars-decoration {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    letter-spacing: 10px;
+    animation: wobble 2s ease-in-out infinite;
+  }
+
+  @keyframes wobble {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+
+  .title {
+    font-family: 'Bungee Shade', cursive;
+    font-size: clamp(2.2rem, 7vw, 5.5rem);
+    line-height: 1;
+    letter-spacing: 2px;
+    background: linear-gradient(
+      45deg,
+      #ff0099 0%,
+      #ffcc00 25%,
+      #00ccff 50%,
+      #ff3366 75%,
+      #9933ff 100%
+    );
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-stroke: 3px #fff;
+    color: transparent;
+    text-shadow:
+      6px 6px 0 #000,
+      8px 8px 0 #ff00aa,
+      10px 10px 20px rgba(0,0,0,0.3);
+    animation: gradientShift 4s ease infinite, titleBounce 1.8s ease-in-out infinite;
+    transform: rotate(-2deg);
+    display: inline-block;
+    padding: 10px 20px;
+  }
+
+  @keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  @keyframes titleBounce {
+    0%, 100% { transform: rotate(-2deg) translateY(0); }
+    50% { transform: rotate(2deg) translateY(-8px); }
+  }
+
+  .subtitle {
+    font-family: 'Bungee', cursive;
+    font-size: clamp(0.9rem, 2.2vw, 1.4rem);
+    color: #fff;
+    background: #d6336c;
+    display: inline-block;
+    padding: 8px 25px;
+    border-radius: 50px;
+    margin-top: 20px;
+    transform: rotate(2deg);
+    box-shadow: 0 5px 0 #8b1f3f, 0 8px 20px rgba(0,0,0,0.3);
+    border: 4px dashed #ffeb3b;
+  }
+
+  .instructions {
+    margin: 30px auto 20px;
+    max-width: 600px;
+    background: rgba(255,255,255,0.92);
+    border: 4px solid #ff4081;
+    border-radius: 25px;
+    padding: 18px 25px;
+    text-align: center;
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    color: #4a148c;
+    font-weight: 600;
+    box-shadow: 0 8px 0 #ad1457, 0 12px 30px rgba(0,0,0,0.2);
+    transform: rotate(-1deg);
+  }
+
+  .instructions span {
+    display: inline-block;
+    font-size: 1.4rem;
+    animation: spin 3s linear infinite;
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* ===== СЕТКА КАРТОЧЕК ===== */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin: 30px auto;
+    max-width: 700px;
+    padding: 0 10px;
+  }
+
+  .card {
+    aspect-ratio: 1;
+    position: relative;
+    cursor: pointer;
+    perspective: 1000px;
+    transition: transform 0.3s ease;
+  }
+
+  .card:hover:not(.opened) {
+    transform: scale(1.05) rotate(-2deg);
+  }
+
+  .card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow:
+      0 6px 0 #4a148c,
+      0 10px 25px rgba(0,0,0,0.35);
+    border: 5px solid #fff;
+    background: linear-gradient(135deg, #ff4081, #7c4dff, #00bcd4);
+  }
+
+  .card-question {
+    width: 100%;
+    height: 100%;
+    background:
+      repeating-linear-gradient(
+        45deg,
+        #ff4081 0px,
+        #ff4081 15px,
+        #ffeb3b 15px,
+        #ffeb3b 30px,
+        #00bcd4 30px,
+        #00bcd4 45px,
+        #7c4dff 45px,
+        #7c4dff 60px
+      );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .card-question::before {
+    content: '?';
+    font-family: 'Bungee Shade', cursive;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    color: #fff;
+    -webkit-text-stroke: 4px #000;
+    text-shadow: 4px 4px 0 #ffeb3b, 6px 6px 10px rgba(0,0,0,0.5);
+    animation: questionPulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes questionPulse {
+    0%, 100% { transform: scale(1) rotate(-5deg); }
+    50% { transform: scale(1.15) rotate(5deg); }
+  }
+
+  .card-number {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: #fff;
+    color: #d6336c;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    border: 3px solid #d6336c;
+    z-index: 2;
+  }
+
+  /* ===== РАСКРЫТАЯ КАРТОЧКА (МОДАЛКА) ===== */
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+    backdrop-filter: blur(8px);
+  }
+
+  .modal-overlay.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .modal-card {
+    position: relative;
+    width: min(90vw, 500px);
+    aspect-ratio: 1;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 8px #fff,
+      0 0 0 14px #ff4081,
+      0 0 60px rgba(255, 64, 129, 0.8);
+    animation: modalPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes modalPop {
+    0% { transform: scale(0.3) rotate(-180deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+
+  .reveal-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #fff;
+  }
+
+  .scratch-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .scratch-canvas:active {
+    cursor: grabbing;
+  }
+
+  .scratch-hint {
+    position: absolute;
+    bottom: -55px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #fff;
+    font-family: 'Bungee', cursive;
+    font-size: 1rem;
+    text-shadow: 2px 2px 0 #d6336c, 0 0 10px rgba(0,0,0,0.5);
+    animation: hintBounce 1s ease-in-out infinite;
+  }
+
+  @keyframes hintBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .close-btn {
+    position: absolute;
+    top: -50px;
+    right: 0;
+    background: #fff;
+    border: 4px solid #ff4081;
+    color: #ff4081;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+  }
+
+  .close-btn:hover {
+    transform: rotate(90deg) scale(1.1);
+  }
+
+  /* Когда карточка стёрта */
+  .card.opened .card-question {
+    opacity: 0.4;
+    filter: grayscale(0.5);
+  }
+
+  .card.opened .card-question::before {
+    content: '✓';
+    color: #00e676;
+    -webkit-text-stroke: 4px #fff;
+  }
+
+  /* Адаптив */
+  @media (max-width: 500px) {
+    .cards-grid {
+      gap: 10px;
+      max-width: 100%;
+    }
+    .stars-decoration {
+      font-size: 1.5rem;
+      letter-spacing: 5px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="stars-decoration">⭐ 🎰 🎲 🎁 🎰 ⭐</div>
+    <h1 class="title">НАДЯ,<br>ИСПЫТАЙ УДАЧУ!</h1>
+    <div class="subtitle">🎉 СУПЕР-МЕГА-ЛОТЕРЕЯ 🎉</div>
+  </div>
+
+  <div class="instructions">
+    <span>👆</span> Жми на карточку и стирай её пальцем или мышкой! <span>🪙</span>
+  </div>
+
+  <div class="cards-grid" id="cardsGrid">
+    <!-- 9 карточек генерируются скриптом -->
+  </div>
+
+</div>
+
+<!-- Модалка с раскрытой карточкой -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-card">
+    <button class="close-btn" id="closeBtn">✕</button>
+    <!--
+      ВСТАВЬ СВОИ ИЗОБРАЖЕНИЯ:
+      Замени src у каждой <img> ниже на путь к своему изображению.
+      Изображения должны быть пронумерованы от 1 до 9.
+    -->
+    <img class="reveal-image" id="revealImage" src="" alt="Приз">
+    <canvas class="scratch-canvas" id="scratchCanvas"></canvas>
+    <div class="scratch-hint">✨ Води по экрану, чтобы стереть ✨</div>
+  </div>
+</div>
+
+<script>
+  // ====== ПУТИ К ИЗОБРАЖЕНИЯМ ======
+  // ВСТАВЬ СЮДА ПУТИ К СВОИМ 9 ИЗОБРАЖЕНИЯМ
+  const images = [
+    'image1.jpg', // карточка 1
+    'image2.jpg', // карточка 2
+    'image3.jpg', // карточка 3
+    'image4.jpg', // карточка 4
+    'image5.jpg', // карточка 5
+    'image6.jpg', // карточка 6
+    'image7.jpg', // карточка 7
+    'image8.jpg', // карточка 8
+    'image9.jpg'  // карточка 9
+  ];
+
+  // ====== ГЕНЕРАЦИЯ КАРТОЧЕК ======
+  const grid = document.getElementById('cardsGrid');
+  for (let i = 0; i < 9; i++) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.index = i;
+    card.innerHTML = `
+      <div class="card-inner">
+        <div class="card-number">${i + 1}</div>
+        <div class="card-question"></div>
+      </div>
+    `;
+    card.addEventListener('click', () => openCard(i));
+    grid.appendChild(card);
+  }
+
+  // ====== МОДАЛКА И СКРЕТЧ ======
+  const modal = document.getElementById('modal');
+  const closeBtn = document.getElementById('closeBtn');
+  const revealImg = document.getElementById('revealImage');
+  const canvas = document.getElementById('scratchCanvas');
+  const ctx = canvas.getContext('2d');
+  let currentCardIndex = null;
+  let isDrawing = false;
+
+  function openCard(index) {
+    currentCardIndex = index;
+    revealImg.src = images[index];
+    modal.classList.add('active');
+
+    // Ждём, пока модалка отрисуется, чтобы получить размеры
+    requestAnimationFrame(() => {
+      setupCanvas();
+    });
+  }
+
+  function setupCanvas() {
+    const rect = canvas.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+
+    // Рисуем "защитный слой" — серебристая поверхность скретч-карты
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, '#c0c0c0');
+    gradient.addColorStop(0.3, '#e8e8e8');
+    gradient.addColorStop(0.5, '#a8a8a8');
+    gradient.addColorStop(0.7, '#d0d0d0');
+    gradient.addColorStop(1, '#909090');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Добавим узор сверху для эффекта скретч-карты
+    ctx.fillStyle = 'rgba(255, 215, 0, 0.3)';
+    ctx.font = 'bold ' + (canvas.width / 10) + 'px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('🎲 СТИРАЙ 🎲', canvas.width / 2, canvas.height / 2 - canvas.height / 6);
+    ctx.fillText('💰💰💰', canvas.width / 2, canvas.height / 2);
+    ctx.fillText('🍀 УДАЧИ 🍀', canvas.width / 2, canvas.height / 2 + canvas.height / 6);
+
+    // Режим стирания
+    ctx.globalCompositeOperation = 'destination-out';
+  }
+
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    if (e.touches && e.touches.length) {
+      return {
+        x: (e.touches[0].clientX - rect.left) * scaleX,
+        y: (e.touches[0].clientY - rect.top) * scaleY
+      };
+    }
+    return {
+      x: (e.clientX - rect.left) * scaleX,
+      y: (e.clientY - rect.top) * scaleY
+    };
+  }
+
+  function scratch(e) {
+    if (!isDrawing) return;
+    e.preventDefault();
+    const { x, y } = getPos(e);
+    const radius = Math.max(canvas.width / 12, 30);
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Проверим, сколько уже стёрли
+    checkScratchedPercent();
+  }
+
+  function checkScratchedPercent() {
+    // Проверяем не каждый раз, а с шансом, чтобы не тормозило
+    if (Math.random() > 0.05) return;
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const pixels = imageData.data;
+    let transparent = 0;
+    const total = pixels.length / 4;
+    for (let i = 3; i < pixels.length; i += 4 * 20) { // сэмплируем
+      if (pixels[i] < 50) transparent++;
+    }
+    const ratio = (transparent / (total / 20));
+    if (ratio > 0.55) {
+      // Автоматически очищаем оставшееся
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0,0,0,1)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      markAsOpened();
+    }
+  }
+
+  function markAsOpened() {
+    if (currentCardIndex !== null) {
+      const cards = document.querySelectorAll('.card');
+      cards[currentCardIndex].classList.add('opened');
+    }
+  }
+
+  // События стирания
+  canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(e); });
+  canvas.addEventListener('mousemove', scratch);
+  canvas.addEventListener('mouseup', () => { isDrawing = false; });
+  canvas.addEventListener('mouseleave', () => { isDrawing = false; });
+
+  canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); }, { passive: false });
+  canvas.addEventListener('touchmove', scratch, { passive: false });
+  canvas.addEventListener('touchend', () => { isDrawing = false; });
+
+  // Закрытие модалки
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+
+  function closeModal() {
+    // Считаем карточку открытой, даже если стёрли частично
+    markAsOpened();
+    modal.classList.remove('active');
+    currentCardIndex = null;
+  }
+
+  // Ресайз окна — пересоздать canvas
+  window.addEventListener('resize', () => {
+    if (modal.classList.contains('active')) {
+      setupCanvas();
+    }
+  });
+</script>
+
+</body>
+</html>
